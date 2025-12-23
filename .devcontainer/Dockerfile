@@ -22,17 +22,9 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Watchman (file watching service for React Native)
-RUN cd /tmp && \
-    git clone https://github.com/facebook/watchman.git && \
-    cd watchman && \
-    git checkout v2023.11.20.00 && \
-    ./autogen.sh && \
-    ./configure && \
-    make && \
-    make install && \
-    cd / && \
-    rm -rf /tmp/watchman
-
+RUN apt-get update && \
+    apt-get install -y watchman && \
+    rm -rf /var/lib/apt/lists/*
 # Install React Native CLI globally
 RUN npm install -g react-native-cli
 
