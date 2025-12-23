@@ -1,0 +1,72 @@
+{
+  "name": "DP-700 Flashcards - React Native",
+  "dockerFile": "Dockerfile",
+  "context": "..",
+  
+  // Configure the dev container
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+  
+  // Features to add to the dev container
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "installOhMyZsh": true,
+      "upgradePackages": true,
+      "username": "node"
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest"
+    }
+  },
+  
+  // Set container-specific settings
+  "customizations": {
+    "vscode": {
+      // Extensions to install
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "dsznajder.es7-react-js-snippets",
+        "msjsdiag.vscode-react-native",
+        "ms-vscode.vscode-typescript-next",
+        "firsttris.vscode-jest-runner"
+      ],
+      
+      // VS Code settings
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+        "typescript.tsdk": "node_modules/typescript/lib",
+        "javascript.suggest.autoImports": true,
+        "typescript.suggest.autoImports": true
+      }
+    }
+  },
+  
+  // Forward ports for Metro bundler and Expo
+  "forwardPorts": [8081, 19000, 19001, 19002],
+  "portsAttributes": {
+    "8081": {
+      "label": "Metro Bundler",
+      "onAutoForward": "notify"
+    }
+  },
+  
+  // Use 'postCreateCommand' to run commands after the container is created
+  "postCreateCommand": "npm install",
+  
+  // Keep the container running
+  "overrideCommand": true,
+  
+  // Run as the node user
+  "remoteUser": "node",
+  
+  // Mount the local .ssh directory for git operations
+  "mounts": [
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/node/.ssh,readonly,type=bind,consistency=cached"
+  ]
+}
