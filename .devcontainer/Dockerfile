@@ -1,5 +1,5 @@
-# Use Node.js 18 LTS (as required by package.json)
-FROM node:18-bullseye
+# Use Node.js 22 LTS (required by React Native 0.76+)
+FROM node:22-bullseye
 
 # Install system dependencies required for React Native
 RUN apt-get update && apt-get install -y \
