@@ -41,9 +41,11 @@ Let's walk through how I would evaluate a hypothetical PR that adds a new featur
 **FlashcardItem.tsx** - Added favorite button:
 ```diff
 + import { TouchableOpacity } from 'react-native';
++ import { useDispatch, useSelector } from 'react-redux';
 + import { toggleFavorite } from '../store/favoritesSlice';
 + 
 + const FlashcardItem = ({ card }) => {
++   const dispatch = useDispatch();
 +   const isFavorite = useSelector(state => 
 +     state.favorites.ids.includes(card.id)
 +   );
@@ -51,7 +53,7 @@ Let's walk through how I would evaluate a hypothetical PR that adds a new featur
 +   return (
 +     <View>
 +       <Text>{card.question}</Text>
-+       <TouchableOpacity onPress={() => toggleFavorite(card.id)}>
++       <TouchableOpacity onPress={() => dispatch(toggleFavorite(card.id))}>
 +         <Icon name={isFavorite ? 'star' : 'star-outline'} />
 +       </TouchableOpacity>
 +     </View>
@@ -129,11 +131,14 @@ interface FavoritesState {
 ```javascript
 // ISSUE: No tests for new feature
 // SUGGESTION: Add unit tests
+import favoritesSlice from '../store/favoritesSlice';
+
 describe('favoritesSlice', () => {
   it('should toggle favorite on', () => {
     const state = { ids: [] };
-    const action = toggleFavorite('card-1');
-    expect(reducer(state, action).ids).toContain('card-1');
+    const action = favoritesSlice.actions.toggleFavorite('card-1');
+    const newState = favoritesSlice.reducer(state, action);
+    expect(newState.ids).toContain('card-1');
   });
 });
 ```
